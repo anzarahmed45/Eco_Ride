@@ -102,6 +102,28 @@ class FleetManager:
                     print(f"  - {v.vehicle_id} | {v.model}")
 
 
+    def search_by_hub(self, hub_name):
+        if hub_name in self.fleet_hubs:
+            print(f"\nVehicles in Hub: {hub_name}")
+            for v in self.fleet_hubs[hub_name]:
+                print(f"  - {v.vehicle_id} | {v.model} | Battery: {v.get_battery()}%")
+        else:
+            print(f"Hub '{hub_name}' not found.")
+
+    def search_high_battery(self, threshold=80):
+        print(f"\nVehicles with Battery > {threshold}%:")
+
+        all_vehicles = [v for vehicles in self.fleet_hubs.values() for v in vehicles]
+
+        result = list(filter(lambda v: v.get_battery() > threshold, all_vehicles))
+
+        if result:
+            for v in result:
+                print(f"  - {v.vehicle_id} | {v.model} | Battery: {v.get_battery()}%")
+        else:
+            print("No vehicles found with high battery.")
+
+
 class ElectricCar(Vehicle):
     def __init__(self, vehicle_id, model, battery_percentage, seating_capacity):
         super().__init__(vehicle_id, model, battery_percentage)
@@ -132,12 +154,15 @@ class ElectricScooter(Vehicle):
 
 manager = FleetManager()
 
-car1 = ElectricCar("KL-70A-0369", "BMW E5", 80, 5)
-car2 = ElectricCar("KL-70A-0369", "Mercedez E7", 70, 5)
+car1 = ElectricCar("KL-70A-0369", "BMW E5", 85, 5)
+car2 = ElectricCar("KL-70B-0456", "Mercedez E7", 70, 5)
+scooter1 = ElectricScooter("KL-70B-0369", "Ather 450X", 90, 90)
 
 manager.add_hub("Downtown")
 
 manager.add_vehicle("Downtown", car1)
-manager.add_vehicle("Downtown", car2)  
+manager.add_vehicle("Downtown", car2)
+manager.add_vehicle("Downtown", scooter1)
 
-manager.display_hubs()
+manager.search_by_hub("Downtown")
+manager.search_high_battery(80)
