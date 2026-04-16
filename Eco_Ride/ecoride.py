@@ -64,9 +64,15 @@ class Vehicle(ABC):
         print("Rental Price    : $", self.__rental_price)
 
 
+    def __eq__(self, other):
+        if isinstance(other, Vehicle):
+            return self.vehicle_id == other.vehicle_id
+        return False
+
+
 class FleetManager:
     def __init__(self):
-        self.fleet_hubs = {}   # Hub -> List of vehicles
+        self.fleet_hubs = {}   
 
     def add_hub(self, hub_name):
         if hub_name not in self.fleet_hubs:
@@ -76,11 +82,14 @@ class FleetManager:
             print(f"Hub '{hub_name}' already exists.")
 
     def add_vehicle(self, hub_name, vehicle):
-        if hub_name in self.fleet_hubs:
-            self.fleet_hubs[hub_name].append(vehicle)
-            print(f"Vehicle {vehicle.vehicle_id} added to {hub_name}.")
-        else:
-            print(f"Hub '{hub_name}' not found.")
+            if hub_name in self.fleet_hubs:
+                if any(v.vehicle_id == vehicle.vehicle_id for v in self.fleet_hubs[hub_name]):
+                    print(f"Duplicate Vehicle ID '{vehicle.vehicle_id}' not allowed in {hub_name}.")
+                else:
+                    self.fleet_hubs[hub_name].append(vehicle)
+                    print(f"Vehicle {vehicle.vehicle_id} added to {hub_name}.")
+            else:
+                print(f"Hub '{hub_name}' not found.")
 
     def display_hubs(self):
         print("\n========== FLEET HUBS ==========")
@@ -124,12 +133,11 @@ class ElectricScooter(Vehicle):
 manager = FleetManager()
 
 car1 = ElectricCar("KL-70A-0369", "BMW E5", 80, 5)
-scooter1 = ElectricScooter("KL-70B-0369", "Ather 450X", 60, 90)
+car2 = ElectricCar("KL-70A-0369", "Mercedez E7", 70, 5)
 
 manager.add_hub("Downtown")
-manager.add_hub("Airport")
 
 manager.add_vehicle("Downtown", car1)
-manager.add_vehicle("Airport", scooter1)
+manager.add_vehicle("Downtown", car2)  
 
 manager.display_hubs()
