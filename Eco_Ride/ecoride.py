@@ -58,11 +58,36 @@ class Vehicle:
         print("Rental Price    : $", self.__rental_price)
 
 
-v1 = Vehicle("KL-70A-0369", "BMW E5", 80)
+class ElectricCar(Vehicle):
+    def __init__(self, vehicle_id, model, battery_percentage, seating_capacity):
+        super().__init__(vehicle_id, model, battery_percentage)
+        self.seating_capacity = seating_capacity
 
-v1.set_rental_price(500)
-v1.set_maintenance_status("Excellent")
+    def display(self):
+        super().display()
+        print("Type            : Car")
+        print("Seating Capacity:", self.seating_capacity)
 
-v1.display()
 
-v1.set_battery(150)   
+class ElectricScooter(Vehicle):
+    def __init__(self, vehicle_id, model, battery_percentage, max_speed_limit):
+        super().__init__(vehicle_id, model, battery_percentage)
+        self.max_speed_limit = max_speed_limit
+
+    def display(self):
+        super().display()
+        print("Type            : Scooter")
+        print("Max Speed Limit :", self.max_speed_limit)
+
+
+car1 = ElectricCar("KL-70A-0369", "BMW E5", 80, 5)
+scooter1 = ElectricScooter("KL-70B-0369", "Ather 450X", 60, 90)
+
+car1.set_rental_price(500)
+scooter1.set_rental_price(100)
+
+car1.set_maintenance_status("Excellent")
+scooter1.set_maintenance_status("Good")
+
+car1.display()
+scooter1.display()
