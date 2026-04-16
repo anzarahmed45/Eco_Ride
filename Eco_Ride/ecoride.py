@@ -152,6 +152,25 @@ class FleetManager:
         else:
             print("  No scooters available")
 
+
+    def vehicle_status_count(self):
+        status_count = {
+            "Available": 0,
+            "On Trip": 0,
+            "Under Maintenance": 0
+        }
+
+        for hub in self.fleet_hubs:
+            for v in self.fleet_hubs[hub]:
+                status = v.get_maintenance_status()
+
+                if status in status_count:
+                    status_count[status] += 1
+
+        print("\n====== Fleet Status Summary ======")
+        for status in status_count:
+            print(f"{status}: {status_count[status]}")
+
     
 
 
@@ -189,11 +208,14 @@ car1 = ElectricCar("KL-70A-0369", "BMW E5", 85, 5)
 car2 = ElectricCar("KL-70B-0456", "Mercedez E7", 70, 5)
 scooter1 = ElectricScooter("KL-70B-0369", "Ather 450X", 90, 90)
 
+car1.set_maintenance_status("Available")
+car2.set_maintenance_status("On Trip")
+scooter1.set_maintenance_status("Under Maintenance")
+
 manager.add_hub("Downtown")
 
 manager.add_vehicle("Downtown", car1)
 manager.add_vehicle("Downtown", car2)
 manager.add_vehicle("Downtown", scooter1)
 
-manager.categorize_vehicles()
-    
+manager.vehicle_status_count()
