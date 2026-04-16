@@ -6,6 +6,5 @@ class EcoRideMain:
         print("=" * 50)
 
 
-# Entry point
 if __name__ == "__main__":
     EcoRideMain.start()
