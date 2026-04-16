@@ -64,6 +64,35 @@ class Vehicle(ABC):
         print("Rental Price    : $", self.__rental_price)
 
 
+class FleetManager:
+    def __init__(self):
+        self.fleet_hubs = {}   # Hub -> List of vehicles
+
+    def add_hub(self, hub_name):
+        if hub_name not in self.fleet_hubs:
+            self.fleet_hubs[hub_name] = []
+            print(f"Hub '{hub_name}' added.")
+        else:
+            print(f"Hub '{hub_name}' already exists.")
+
+    def add_vehicle(self, hub_name, vehicle):
+        if hub_name in self.fleet_hubs:
+            self.fleet_hubs[hub_name].append(vehicle)
+            print(f"Vehicle {vehicle.vehicle_id} added to {hub_name}.")
+        else:
+            print(f"Hub '{hub_name}' not found.")
+
+    def display_hubs(self):
+        print("\n========== FLEET HUBS ==========")
+        for hub, vehicles in self.fleet_hubs.items():
+            print(f"\nHub: {hub}")
+            if not vehicles:
+                print("  No vehicles available")
+            else:
+                for v in vehicles:
+                    print(f"  - {v.vehicle_id} | {v.model}")
+
+
 class ElectricCar(Vehicle):
     def __init__(self, vehicle_id, model, battery_percentage, seating_capacity):
         super().__init__(vehicle_id, model, battery_percentage)
@@ -92,17 +121,15 @@ class ElectricScooter(Vehicle):
         print("Max Speed Limit :", self.max_speed_limit)
 
 
+manager = FleetManager()
+
 car1 = ElectricCar("KL-70A-0369", "BMW E5", 80, 5)
 scooter1 = ElectricScooter("KL-70B-0369", "Ather 450X", 60, 90)
 
-vehicles = [car1, scooter1]   # mixed objects
+manager.add_hub("Downtown")
+manager.add_hub("Airport")
 
-print("\n--- Trip Cost Calculation ---")
-for v in vehicles:
-    if isinstance(v, ElectricCar):
-        cost = v.calculate_trip_cost(10)
-        print(f"{v.model} (Car) Cost for 10 km: ${cost}")
-    else:
-        cost = v.calculate_trip_cost(30) 
-        print(f"{v.model} (Scooter) Cost for 30 min: ${cost}")
+manager.add_vehicle("Downtown", car1)
+manager.add_vehicle("Airport", scooter1)
 
+manager.display_hubs()
