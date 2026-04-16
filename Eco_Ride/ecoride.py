@@ -70,7 +70,7 @@ class ElectricCar(Vehicle):
         self.seating_capacity = seating_capacity
 
     def calculate_trip_cost(self, distance):
-        pass
+        return 5 + (0.5 * distance)
 
     def display(self):
         super().display()
@@ -84,7 +84,7 @@ class ElectricScooter(Vehicle):
         self.max_speed_limit = max_speed_limit
 
     def calculate_trip_cost(self, minutes):
-        pass
+        return 1 + (0.15 * minutes)
 
     def display(self):
         super().display()
@@ -95,6 +95,14 @@ class ElectricScooter(Vehicle):
 car1 = ElectricCar("KL-70A-0369", "BMW E5", 80, 5)
 scooter1 = ElectricScooter("KL-70B-0369", "Ather 450X", 60, 90)
 
+vehicles = [car1, scooter1]   # mixed objects
 
-car1.display()
-scooter1.display()
+print("\n--- Trip Cost Calculation ---")
+for v in vehicles:
+    if isinstance(v, ElectricCar):
+        cost = v.calculate_trip_cost(10)
+        print(f"{v.model} (Car) Cost for 10 km: ${cost}")
+    else:
+        cost = v.calculate_trip_cost(30) 
+        print(f"{v.model} (Scooter) Cost for 30 min: ${cost}")
+
