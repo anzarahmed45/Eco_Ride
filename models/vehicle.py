@@ -55,3 +55,7 @@ class Vehicle(ABC):
         if isinstance(other, Vehicle):
             return self.vehicle_id == other.vehicle_id
         return False
+    
+    def __str__(self):
+        return f"{self.vehicle_id} - {self.model} (Battery: {self.get_battery()}%)"
+
