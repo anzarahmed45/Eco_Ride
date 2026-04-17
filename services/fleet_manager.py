@@ -102,6 +102,7 @@ class FleetManager:
         for status in status_count:
             print(f"{status}: {status_count[status]}")
 
+
     def sort_by_model(self, hub_name):
         if hub_name in self.fleet_hubs:
             vehicles = self.fleet_hubs[hub_name]
@@ -111,5 +112,33 @@ class FleetManager:
             print(f"\n====== Vehicles in {hub_name} (Sorted by Model) ======")
             for v in sorted_list:
                 print(v)   # uses __str__()
+        else:
+            print(f"Hub '{hub_name}' not found.")
+
+
+    def sort_by_battery(self, hub_name):
+        if hub_name in self.fleet_hubs:
+            vehicles = self.fleet_hubs[hub_name]
+
+            # sort by battery (highest first)
+            sorted_list = sorted(vehicles, key=lambda v: v.get_battery(), reverse=True)
+
+            print(f"\n====== Vehicles in {hub_name} (Sorted by Battery) ======")
+            for v in sorted_list:
+                print(v.vehicle_id, "-", v.model, "| Battery:", v.get_battery(), "%")
+        else:
+            print(f"Hub '{hub_name}' not found.")
+
+
+    def sort_by_price(self, hub_name):
+        if hub_name in self.fleet_hubs:
+            vehicles = self.fleet_hubs[hub_name]
+
+            # sort by price (highest first)
+            sorted_list = sorted(vehicles, key=lambda v: v.get_rental_price(), reverse=True)
+
+            print(f"\n====== Vehicles in {hub_name} (Sorted by Price) ======")
+            for v in sorted_list:
+                print(v.vehicle_id, "-", v.model, "| Price: ₹", v.get_rental_price())
         else:
             print(f"Hub '{hub_name}' not found.")
